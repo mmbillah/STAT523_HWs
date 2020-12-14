@@ -1,0 +1,234 @@
+---
+title: "STAT523_HW7"
+author: "Md Muhtasim Billah"
+date: "3/12/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+(Chapter 11, Section 11.2, Exercise 16 from Jay L. Devore) In an experiment to assess the effects of curing time (factor A) and type of mix (factor B) on the compressive strength of hardened cement cubes, three different curing times were used in combination with four different mixes, with three observations obtained for each of the 12 curing time–mix combinations. The resulting sums of squares were computed to be $SSA=30,763.0, \ SSB=34,185.6, \ SSE=97,436.8,$ and $SST=205,966.6$.
+
+  a. Construct an ANOVA table.
+  b. Test at level .05 the null hypothesis $H_{0AB}:$ all $\gamma_{ij}$’s = 0 (no interaction of factors) against $H_{aAB}:$ at least one $\gamma_{ij} \ne 0$.
+  c. Test at level .05 the null hypothesis $H_{0A}: \alpha_1=\alpha_2=\alpha_3=0$ (factor A main effects are absent) against $H_{aA}:$ at least one $\alpha_i \ne 0$.
+  e. The values of the $\bar{x}_{i..}$’s where $\bar{x}_{1..}=4010.88$, $\bar{x}_{2..}=4029.10$, and $\bar{x}_{3..}=3960.02$. Use Tukey’s procedure to investigate significant differences among the three curing times.
+  
+Give the F statistic, rejection region, and conclusion for parts (b) and (c). For the T Method (underscoring) procedure in part (e), see Formula 11I. Use Formula 11H to find the df's.
+
+
+# Answer:
+
+## a.
+
+The ANOVA table for the two way interaction fixed model.
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+{Source}        & {DF}    & {SS}          & {MS}        & {F}      & {p-value} \\
+\hline
+{Cutting Time}  & $2$     & $30,763.0$    & $15381.5$   & $3.79$   & $0.0371$ \\
+\hline
+{Type of Mix}   & $3$     & $34,185.6$    & $11395.2$   & $2.81$   & $0.0610$ \\
+\hline
+{Interaction}   & $6$     & $43581.2$     & $7263.5$    & $1.79$   & $0.1438$\\
+\hline
+{Error}         & $24$    & $97,436.8$    & $4059.9$    & &\\
+\hline
+{Total}         & $35$    & $205,966.6$   & & &\\
+\hline
+\end{tabular}
+\end{center}
+
+
+```{r}
+#p-values
+1-pf(3.79,3-1,3*4*(3-1))  #for A
+1-pf(2.81,4-1,3*4*(3-1))  #for B
+1-pf(1.79,(3-1)*(4-1),3*4*(3-1))  #for A:B
+```
+
+## b.
+
+Null hypothesis $H_{0AB}:$ all $\gamma_{ij}$’s = 0. 
+Alternative hypothesis $H_{aAB}:$ at least one $\gamma_{ij} \ne 0$.
+
+Now, \newline
+F-statistic = 1.79 \newline
+Rejection region = 2.51 \newline
+We see that, our F-statistic is not within the rejection region. So, the null is retained. \newline
+
+Again, \newline
+p-value = 0.1438 \newline
+$\alpha$ = 0.05 \newline
+We see that, p-value>$\alpha$, so the null is retained. \newline
+
+Both from the rejection region and the p-value, it is evident that there is no significant interaction between the two factors.
+
+```{r}
+#F-critical for rejection region
+qf((1-0.05),(3-1)*(4-1),3*4*(3-1))
+```
+
+
+## c.
+
+
+Given, \newline
+Null hypothesis, $H_{0A}: \alpha_1=\alpha_2=\alpha_3=0$. \newline
+Alternative hypothesis, $H_{aA}:$ at least one $\alpha_i \ne 0$. \newline
+
+Now, \newline
+F-statistic = 3.79 \newline
+Rejection region = 3.009 \newline
+We see that, our F-statistic is within the rejection region. So, the null is rejected. \newline
+
+```{r}
+#F-critical for rejection region
+qf((1-0.05),(4-1),3*4*(3-1))
+```
+
+Again, \newline
+p-value = 0.0371 \newline
+$\alpha$ = 0.05 \newline
+We see that, p-value<$\alpha$, so the null is rejected. \newline
+
+Both from the rejection region and the p-value, it is evident that curing time has significant effect on the mpressive strength.
+
+
+## e.
+
+We do Tukey's underscore method for signigicant difference for factor A (curing time). The margin of error is given by,
+
+$$w_A=Q_{\alpha,\ I,\ IJ(k-1)}\sqrt{\frac{MSE}{JK}}$$
+Here,\newline
+Tukey's quantity, $Q_{\alpha,\ I,\ IJ(k-1)}=3.5317$.\newline
+
+```{r}
+qtukey(0.95,3,24)
+```
+
+So, the margin or error,
+$$w_A=3.5317\times\sqrt{\frac{4059.9}{4*3}}=64.9607$$
+
+Given, \newline
+$\bar{x}_{1..}=4010.88$, $\bar{x}_{2..}=4029.10$, and $\bar{x}_{3..}=3960.02$.
+
+First, we rearrange them in ascending order. Then, we add $w_A$ to the smallest value which is $\bar{x}_{3..}$ to get,
+
+$$3960.02+64.9607=4024.9807$$
+This doesn't include the mean for $\bar{x}_{2..}$. So, we add $w_A$ again with $\bar{x}_{1..}$ to get,
+
+$$4010.88+64.9607=4075.8407$$
+This includes the largest value so we stop. The underscore plot is given below.
+
+
+\begin{center}
+\begin{tabular}{c c c}
+
+
+$\bar{x}_{3..}$     & $\bar{x}_{1..}$    & $\bar{x}_{2..}$  \\
+
+$3960.02$           & $4010.88$          & $4029.10$  \\
+
+
+\end{tabular}
+\end{center}
+
+
+
+The underscore plot indicates that there is no significant difference between $\bar{x}_{3..}$ and $\bar{x}_{1..}$. There is also no significant difference between $\bar{x}_{1..}$ and $\bar{x}_{2..}$. But there is significant difference between $\bar{x}_{3..}$ and $\bar{x}_{2..}$
+
+
+\newpage
+# Question 2
+
+(On the dataset from Chapter 11, Section 11.2, Exercise 18 of Jay L. Devore) Assume a two-way interaction model with fixed-effects. The ANOVA table and interaction plot are given.
+
+  a. At the $\alpha=0.05$ level of significance, which effects (Formulation, Speed, Formulation-Speed interaction) are significant? Give corresponding P-values.
+  c. Refer to the interaction plot.\newline
+    i. Which level combination of Formulation and Speed gives the highest value of Yield on average?\newline
+    ii. Compute the fitted value for this combination.\newline
+
+
+# Answer
+
+## a.
+
+The ANOVA table generated in R is given below.
+
+```{r message=FALSE}
+library(Devore7)
+data(ex11.16)
+out=aov(Response~Formulat*Speed,data=ex11.16) 
+summary(out)
+```
+
+At $\alpha=0.05$, the significance of the effects are given below with their corresponding P-values.
+
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+{Effects}        & {p-values}    & {Significant or Not}  \\
+\hline
+{Formulation}   & {$1.99e^{-10}$}    & {Significant}  \\
+\hline
+{Speed}        & {$0.000179$}    & {Significant}  \\
+\hline
+{Formulation-Speed Interaction}   & {$0.251639$}    & {Not Significant}  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+## b.
+
+The interaction plot, generated in R, is given below.
+
+```{r}
+with(ex11.16, {interaction.plot(Formulat, Speed, Response, 
+                                trace.label = "speed",fixed = TRUE, lwd=2)})
+```
+
+  i. Combination
+
+The combination of the Speed level 80 (Factor A) and Formulation (Factor B) level 1 gives the highest Yield on average.
+
+  ii. Fitted Value
+
+The formula for finding the fitted value is as below.
+
+$$\hat{x}_{ij}=\hat{\mu}+\hat{\alpha_i}+\hat{\beta_j}+\hat{\gamma}_{ij}$$
+Since factor A (Speed) is at level 3, $i=3$. And, since factor B (Formulation) is at level 1, $j=1$. So, for this combination,
+
+$$\hat{x}_{31}=\hat{\mu}+\hat{\alpha_3}+\hat{\beta_1}+\hat{\gamma}_{31}$$
+Here, estimation for mean,
+$$\hat{\mu}=\bar{x}_{...}=175.84$$
+Estimation for the main effects of factor A (Speed),
+$$\hat{\alpha_i}=\bar{x}_{i..}-\bar{x}_{...}$$
+Thus, for factor A (Speed) at level 3,
+$$\hat{\alpha_3}=\bar{x}_{3..}-\bar{x}_{...}=178.883-175.84=3.043$$
+Estimation for the main effects of factor B (Formulation),
+$$\hat{\beta_i}=\bar{x}_{.j.}-\bar{x}_{...}$$
+Thus, for factor B (Formulation) at level 1,
+$$\hat{\beta_1}=\bar{x}_{.1.}-\bar{x}_{...}=187.03-175.84=11.19$$
+Estimation for the interaction terms,
+$$\hat{\gamma}_{ij}=\bar{x}_{ij.}-\bar{x}_{i..}-\bar{x}_{.j.}+\bar{x}_{...}$$
+So, for interaction between factor A at level 3 and factor B at level 1,
+$$\hat{\gamma}_{31}=\bar{x}_{31.}-\bar{x}_{3..}-\bar{x}_{.1.}+\bar{x}_{...}$$
+$$\hat{\gamma}_{31}=191.03-178.883-187.03+175.84=0.96$$
+Finally, we get the fitted value as,
+$$\hat{x}_{31}=\hat{\mu}+\hat{\alpha_3}+\hat{\beta_1}+\hat{\gamma}_{31}$$
+$$\hat{x}_{31}=175.84+3.043+11.19+0.96=191.033$$
+
+
+
+
+
+
+

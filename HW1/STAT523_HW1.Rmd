@@ -1,0 +1,273 @@
+---
+title: "STAT 523 HW1"
+author: "Md Muhtasim Billah"
+date: "1/23/2020"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1. 
+
+To obtain information on the corrosion-resistance properties of a certain type of steel conduit, 35 specimens are buried in soil for a 2-year period. The penetration (in mils) for each specimen is then measured, yielding a sample mean penetration of $\bar{x}$ = 35.7 and a sample standard deviation of s = 4.2.
+\newline
+A. Suppose the true population standard deviation is $\sigma$ = 5. Construct a 90% confidence interval for the true average penetration for this type of steel conduit. Interpret the interval.
+\newline
+B. Now suppose the true standard deviation is unknown. Construct a 90% confidence interval for the true average penetration for this type pf steel conduit. Interpret the interval.
+
+## \underline{Answer}:
+
+### A.
+
+Given,
+  Sample size, n = 35
+  Sample mean, $\bar{x}$ = 35.7
+  Sample standard deviation, s = 4.2
+  True population standard deviation, $\sigma$ = 5
+  Confidence level = 90%
+
+Find,
+  The confidence interval for the true average penetration of the steel conduit.
+  
+Now,
+  $$\alpha = 1-90\% = 1-0.9 = 0.1$$
+  $$\alpha/2 = 0.1/2 = 0.05$$
+  
+Assuming a normal distribution, since the true population standard deviation is known, we will use the z-statistic.
+
+From class notes,
+$$z_{0.05} = 1.645$$
+Using R,
+```{r message=FALSE, warning=FALSE}
+qnorm(1-0.05)
+```
+Now, we calculate the cofidence interval (when the population standard deviation is known) with the following formula.
+$$\left[\bar{x}-z_{\alpha/2}\times \frac{\sigma}{\sqrt{n}},\space \bar{x}+z_{\alpha/2}\times \frac{\sigma}{\sqrt{n}}\right] $$
+Plugging in the values,
+$$\left[35.7-z_{0.05}\times \frac{5}{\sqrt{35}},\space 35.7+z_{0.05}\times \frac{5}{\sqrt{35}}\right]$$
+$$\left[35.7-1.645\times \frac{5}{\sqrt{35}},\space 35.7+1.645\times \frac{5}{\sqrt{35}}\right]$$
+Calculating the value in R,
+```{r message=FALSE, warning=FALSE}
+35.7-1.645*(5/sqrt(35))
+35.7+1.645*(5/sqrt(35))
+```
+So, the confidence interval (CI) for the true average penetration for this type of steel conduit (with 90% confidence) is,
+$$\left[ 34.31,\space37.09\right] $$
+\underline{Interpretaion:}
+\newline 
+\newline It can be said with 90% cofidence that the true mean of the population will be within this interval.\newline
+
+
+### B.
+  
+Assuming a normal distribution, since the true population standard deviation is unknown, we will use the t-statistic.
+
+From Table A5 of formula packet page 22 (FP-22),
+$$t_{\alpha/2,n-1} = t_{0.05,35-1} = 1.691$$
+Using R,
+```{r message=FALSE, warning=FALSE}
+qt(1-0.05,35-1)
+```
+Now, we calculate the cofidence interval (when the population standard deviation is unknown) with the following formula.
+$$\left[\bar{x}-t_{\alpha/2,\space n-1}\times \frac{s}{\sqrt{n}},\space \bar{x}+t_{\alpha/2,\space n-1}\times \frac{s}{\sqrt{n}}\right] $$
+Plugging in the values,
+$$\left[35.7-t_{0.05,\space35-1}\times \frac{4.2}{\sqrt{35}},\space 35.7+t_{0.05,\space35-1}\times \frac{4.2}{\sqrt{35}}\right]$$
+$$\left[35.7-1.691\times \frac{4.2}{\sqrt{35}},\space 35.7+1.691\times \frac{4.2}{\sqrt{35}}\right]$$
+Calculating the value in R,
+```{r message=FALSE, warning=FALSE}
+35.7-1.691*(4.2/sqrt(35))
+35.7+1.691*(4.2/sqrt(35))
+```
+So, the confidence interval (CI) for the true average penetration for this type of steel conduit (with 90% confidence) is,
+$$\left[ 36.30,\space38.70\right] $$
+\underline{Interpretaion:}
+\newline 
+\newline It can be said with 90% cofidence that the true mean of the population will be within this interval.
+
+\newpage
+
+## Problem 2. 
+
+The recommended daily dietary allowance for zinc among males older than age 50 years is 15 mg/day. A study reports the following summary data on intake for a sample of males age 65–74 years: n = 20, $\bar{x}$ = 10.23, and s = 5.17. The scientist wants to know if this data indicates that average daily zinc intake in the population falls below the recommended allowance.
+\newline
+A. The QQ plot is provided on the right and Shapiro-Wilk normality test is provided. Use this to assess if it is plausible to assume that the daily zinc intake is normally distributed. Briefly explain your answer.
+\newline
+B. Carry out the test of $H_0: \mu=15$ vs $H_a: \mu<15$ at $\alpha=0.05$. Make sure you calculate the test statistic, define the rejection region, and make a decision about the test.
+
+## \underline{Answer}:
+
+## A.
+
+The normal probability plot or QQ plot generated in R using the provided information idicates that there exist linearity among the theroretical and sample quantiles. This indicates that the data come from a normal distribution.
+\newline
+Another way to see this is the outcome of the Shapiro-Wilk normality test performed on this dataset. For this test, the null hypothesis was that the data come from a normal distribution. The p-value is way higher than the significance level $\alpha=0.05$ (assumed) which indicates that the null cannot be rejected. Which means the data come from a normal distribution.
+```{r message=FALSE, warning=FALSE}
+x=c(9.41, 20.06, 8.80, 10.10, 14.38, 10.42, 13.30, 4.04, 3.40, 11.95, 12.77, 6.39, 21.95, 14.82, 12.75, 8.86, 5.56, 6.26, 6.52, 2.81)
+qqnorm(x)
+shapiro.test(x) # Test of H0: {Data come from a normal distribution.}
+```
+
+## B.
+
+\underline{Step 1:} Stating the null and alternative hypothesis
+
+Null hypothesis, $H_0: \mu=15$
+Alternate hypothesis, $H_a: \mu<15$
+
+Level of significance, $\alpha=0.05$
+
+\underline{Step 2:} Calculate the test statistic
+
+Since the true population standard deviation, $\sigma$ is unknown, we use the t-statistic.
+$$t=\frac{\bar{x}-\mu_0}{s/\sqrt{n}}$$
+$$t=\frac{10.23-15}{5.17/\sqrt{20}}$$
+Calculating value using R,
+```{r message=FALSE, warning=FALSE}
+(10.23-15)/(5.17/sqrt(20))
+```
+So, the t-statistic is,
+$$t=-4.126$$
+
+\underline{Step 3:} Find the rejection region (RR) or p-value
+
+\underline{Rejection region:}
+$$RR: t \le -t_{\alpha,\space n-1}$$
+Now, from FP-22, Table A5,
+$$t_{0.05,\space 19}=1.729$$
+Using R,
+```{r message=FALSE, warning=FALSE}
+qt(1-0.05,19)
+```
+Thus, it is evident that, 
+$$-4.126 \le -1.729$$
+$$ t \le -t_{\alpha,\space n-1}$$
+So, out t-statistic is within the RR.
+
+\underline{p-value:}
+$$P(T_{n-1} \ge |t|) $$
+Using R,
+```{r message=FALSE, warning=FALSE}
+pt(-4.126,19)
+```
+It is clearly evident that,
+$$0.0002873021 < 0.05$$
+$$p-value < \alpha$$
+So, the p-value is much lesser than $\alpha$.
+
+\underline{Step 4:} Make a decision
+
+Since, the t-statistic is within the RR and the p-value is smaller than $\alpha$, it is safe to say the the null hypothesis is rejected and alternate hypothesis is accepted.
+
+
+The results of the hypotheis testing can also be validated using R.
+```{r message=FALSE, warning=FALSE}
+t.test(x,mu=15,alternative="less")
+```
+
+Since, same results are obtained from R, it can be safely said that the test was correctly done.
+
+
+
+\newpage
+## Problem 3
+
+A pollution-control inspector suspected that a riverside community was releasing semi-treated sewage into a river and this, as a consequence, was changing the level of dissolved oxygen of the river. To check this, he drew 45 randomly selected specimens of river water at a location above the town and another 45 specimens below. The sample information for the measured oxygen level by groups are given blow.
+![alt text here](/Users/muhtasim/Desktop/hw.jpeg)
+A. Construct a 90% two-sided confidence interval for the difference between the average dissolved oxygen levels above town and below town. Does the data provide evidence to indicate a difference in the true average dissolved oxygen between locations above and below town?
+\newline
+B. The scientist wants to know if the average oxygen level below town is higher than above town. Run a hypothesis test at significance level $\alpha=0.05$. Use the 4-step procedure: 1: State the null and alternative hypotheses. 2: Give the test statistic, 3: find the rejection region or the p-value, and 4: make a decision.
+
+## \underline{Answer:}
+
+## A.
+
+Given,\newline
+  For above town, $\bar{x}$ = 4.83, $s_1=0.175$, m = 45 \newline
+  For below town, $\bar{y}$ = 4.55, $s_2=0.234$, n = 45
+  
+Here, the sample size for two populations is > 30. So, it falls under the Case II and thus we will use the z-statistic.
+
+For 2-sided CI, the formula is as below.
+$$(\bar{x}-\bar{y}) \space \pm \space z_{\alpha/2} \sqrt{\frac{{\sigma_1}^{2}}{m}+\frac{{\sigma_2}^{2}}{n}}$$
+Since, $\sigma_1$ and $\sigma_2$ are unknown, we will replace them with $s_1$ and $s_2$ respectively. 
+$$(\bar{x}-\bar{y}) \space \pm \space z_{\alpha/2} \sqrt{\frac{{s_1}^{2}}{m}+\frac{{s_2}^{2}}{n}}$$
+Plugging in the values,
+$$(4.83-4.55) \space \pm \space z_{0.05} \sqrt{\frac{{0.175}^{2}}{45}+\frac{{0.234}^{2}}{45}}$$
+Calculating using R, where $z_{0.05}=1.645$
+```{r message=FALSE, warning=FALSE}
+(4.83-4.55)+(1.645*sqrt(((0.175)^2/45)+((0.234)^2/45)))
+(4.83-4.55)-(1.645*sqrt(((0.175)^2/45)+((0.234)^2/45)))
+```
+So, the two sided confidence interval is,
+$$[0.35,0.21]$$
+Since, 0 is not within the CI, we can say that the data provides evidence to indicate a difference in the true average dissolved oxygen between locations above and below town.
+
+## B.
+
+Given,\newline
+Level of significance, $\alpha=0.05$
+
+We will run a hypothesis test to know if the average oxygen level below town is higher than above town.
+
+\underline{Step 1:} Stating the null and alternative hypothesis
+
+Null hypothesis, $H_0: \mu_1-\mu_2=0$. \newline
+Alternate hypothesis, $H_a: \mu_1-\mu_2<0$.
+
+\underline{Step 2:} Calculate the test statistic
+
+Here, the sample size for two populations is > 30. So, it falls under the Case II and thus we will use the z-statistic.
+$$z=\frac{(\bar{x}-\bar{y})-\Delta_0} {\sqrt{\frac{{\sigma_1}^{2}}{m}+\frac{{\sigma_2}^{2}}{n}}}$$
+Here, $$\Delta_0=\mu_1-\mu_2=0$$
+Since, $\sigma_1$ and $\sigma_2$ are unknown, we will replace them with $s_1$ and $s_2$ respectively.
+$$z=\frac{(\bar{x}-\bar{y})} {\sqrt{\frac{{s_1}^{2}}{m}+\frac{{s_2}^{2}}{n}}}$$
+Pluggin in the values,
+$$z=\frac{(4.83-4.55)} {\sqrt{\frac{{0.175}^{2}}{45}+\frac{{0.234}^{2}}{45}}}$$
+Calculating value using R,
+```{r message=FALSE, warning=FALSE}
+(4.83-4.55)/(sqrt((0.175^2/45)+(0.234^2/45)))
+```
+So, the z-statistic is,
+$$z=6.43$$
+
+\underline{Step 3:} Find the rejection region (RR) or p-value
+
+\underline{Rejection region:}
+The rejection region criteria is,
+$$RR: z \le -z_\alpha$$
+Now, from class notes,
+$$z_{0.05}=1.645$$
+Using R,
+```{r message=FALSE, warning=FALSE}
+qnorm(1-0.05)
+```
+Thus, it is evident that, 
+$$6.43 \ge -1.645$$
+$$ z \ge -z_{\alpha}$$
+So, z-statistic is not within the RR.
+
+\underline{p-value:}
+$$P(Z \le z) $$
+Using R,
+```{r message=FALSE, warning=FALSE}
+pnorm(1.645)
+```
+It is clearly evident that,
+$$0.95 > 0.05$$
+$$p-value > \alpha$$
+So, the p-value is greater than $\alpha$.
+
+\underline{Step 4:} Make a decision
+
+Since, the z-statistic is not within the RR and the p-value is greater than $\alpha$, we will retain the null hypothesis and reject the alternate hypothesis. This means that, the average oxygen level below town is not higher than above town.
+
+
+
+
+
+
+

@@ -1,0 +1,109 @@
+---
+title: "STAT523 HW6"
+author: "Md Muhtasim Billah"
+date: "3/5/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question
+
+(From Jay L. Devore, Chapter 11, Section 11.1, Exercise 10) The strength of concrete used in commercial construction tends to vary from one batch to another. Consequently, small test cylinders of concrete sampled from a batch are “cured” for periods up to about 28 days in temperature- and moisture-controlled environments before strength measurements are made. Concrete is then “bought and sold on the basis of strength test cylinders” (ASTM C 31 Standard Test Method for Making and Curing Concrete Test Specimens in the Field). The accompanying data resulted from an experiment carried out to compare three different curing methods with respect to compressive strength (MPa). The ANOVA table for this dataset is provided below.
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+{Source}   & {DF}    & {SS}      & {MS}      & {F} & {p-value} \\
+\hline
+{Batch}    & $9$     & $86.793$    & $9.644$   & $7.22$   & $0.000$ \\
+\hline
+{Method}   & $2$     & $23.229$  & $11.614$   & $8.69$   & $0.002$ \\
+\hline
+{Error}    & $18$    & $24.045$   & $1.336$ & &\\
+\hline
+{Total}    & $29$    & $134.067$  & & &\\
+\hline
+\end{tabular}
+\end{center}
+
+Follow these instructions:
+  
+  a. With $\alpha=0.05$, perform the 2 tests of hypothesis: 
+      
+      • (Factor A = Batch) $H_0: {\sigma_A}^2= 0$ vs. $H_a: {\sigma_A}^2 \ne 0$.
+      
+      • (Factor B = Method) $H_0: \beta_1= \beta_2= \beta_3=0$ vs. $H_a: H_0$ is false.
+      
+      Follow the 4-step procedure and use the P-values above.
+  b. Suppose that Factor A (Batch) is a random effect. Compute by hand an estimate of ${\sigma_A}^2$.
+  c. How much of total variation in a single observation is attributed to differences between batches?
+
+# Answer
+
+## a.
+
+  I) Hypothesis test for Factor A (Batch)
+
+\underline{Step 1}:
+
+Null hypothesis, $H_0: {\sigma_A}^2= 0$.\newline 
+Alternative hypothesis, $H_a: {\sigma_A}^2 \ne 0$.\newline
+Level of significance, $\alpha=0.05$.\newline
+
+\underline{Step 2}:
+
+From the provided ANOVA table, the F-statistic is,
+$$F=7.22$$
+\underline{Step 3}:
+
+From the provided ANOVA table,
+$$p-value=0.000$$
+
+\underline{Step 4}:
+
+It is evident that,
+$$p-value<\alpha$$
+So, there is enough statistical evidence to reject the null. It means that the variance across the different batches are significantly different.
+
+
+  II) Hypothesis test for Factor B (Method)
+  
+\underline{Step 1}:
+
+Null hypothesis, $H_0: \beta_1= \beta_2= \beta_3=0$.\newline 
+Alternative hypothesis, $H_a: H_0$ is false.\newline
+Level of significance, $\alpha=0.05$.\newline
+
+\underline{Step 2}:
+
+From the provided ANOVA table, the F-statistic is,
+$$F=8.69$$
+\underline{Step 3}:
+
+From the provided ANOVA table,
+$$p-value=0.002$$
+
+\underline{Step 4}:
+
+It is evident that,
+$$p-value<\alpha$$
+So, there is enough statistical evidence to reject the null. It means that the different levels of different methods provide different strength.
+
+## b.
+
+If factor A has random effect, the variance estimate for it can be calculates as below.
+
+$${{\hat{\sigma}}_A}^2=\frac{MSA-MSE}{J}=\frac{9.644-1.336}{3}=2.7693$$
+
+## c.
+
+Estimated total variance in one obeservation,
+$$\hat{V}(X_{ij})={\hat{\sigma}}^2+{{\hat{\sigma}}_A}^2=MSE+{{\hat{\sigma}}_A}^2=1.336+2.7693=4.12$$
+The percentage of total variation attributed by the differences between batches $=\frac{2.7693}{4.12}=0.6722=67.22$%.
+
+
+
+

@@ -1,0 +1,207 @@
+---
+title: "STAT 523 HW 4"
+author: "Md Muhtasim Billah"
+date: "2/13/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+From the texbook- Probabilty and Statistics for Engineering and Sciences by Jay L. Devore, Chapter 10, Section 10.2, Exercise 17, the contrast is given as, $\theta=1/2(\mu_1+\mu_2)-\mu_3$. Compute a 2-sided CI for this contrast. Use $MSE = 0.6603$, $I=3$, $J=10$ with 95% confidence.
+
+# Answer
+
+Given,
+
+Number of treatments, $I=3$.\newline
+Number of replicates, $J=10$.\newline
+Level of significance, $\alpha=0.05$.\newline
+$MSE = 0.6603$.\newline
+
+The contrast, 
+$$\theta=C=1/2(\mu_1+\mu_2)-\mu_3$$
+Since, contrasts that differ by a scalar (constant) factor are equivalent, we can rewrite the contrast as,
+$$C=2 \times C=2\times\left[1/2(\mu_1+\mu_2)-\mu_3\right]$$
+$$C=\mu_1+\mu_2-2\mu_3$$
+Since, we don't know the population (true) means $\mu_1,\mu_2,\mu_3$ of the treatments, we replace them with the sample means $\bar{x}_{1.},\bar{x}_{2.},\bar{x}_{3.}$ respectively. The sample means (from the same textbook, chapter 10, section 10.1, exercise 5, for the modulus of elasticity for lumber of three different grades) are as below.
+
+
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+{Grade}  &  {J} & {$\bar{x}_{i.}$}  \\
+\hline
+{1}      & $10$ & $1.63$ \\
+\hline
+{2}      & $10$ & $1.56$ \\
+\hline
+{3}      & $10$ & $1.42$  \\
+\hline
+\end{tabular}
+\end{center}
+
+So, an unbiased estimate of the contast, $C$ becomes,
+$$\hat{C}=\sum\limits_{i=1}^{I} c_i\bar{x}_{i.}$$
+$$\hat{C}=\bar{x}_{1.}+\bar{x}_{2.}-2\bar{x}_{3.}$$
+Where, $$\sum\limits_{i=1}^{I} c_i=1+1-2=0$$
+Plugging in the values, we get,
+$$\hat{C}=1.63+1.56-2\times1.42$$
+$$\hat{C}=0.35>0$$
+Now, from Formula Packet 10G, the 2-sided CI for contrast $C$ is,
+$$\hat{C}\pm t_{\alpha/2,I(J-1)} \sqrt{\frac{MSE\sum\limits_{i=1}^I {c_i}^2} {J}}$$
+Here,
+$$\sum\limits_{i=1}^I {c_i}^2=(1)^2+(1)^2+(-2)^2=6$$
+Plugging in all the values,
+$$0.35\pm t_{0.05/2, \ 3(10-1)} \sqrt{\frac{0.6603\times 6} {10}}$$
+Here,
+$$t_{0.05/2, \ 3(10-1)}=t_{0.025, \ 3(10-1)}=2.0518$$
+```{r}
+qt(1-0.025,27)
+```
+Finally,
+$$0.35\pm 2.0518 \sqrt{\frac{0.6603\times 6} {10}}$$
+$$0.35\pm 1.29146$$
+So, the two-sided confidence interval for the given contrast is,
+$$(-0.94146,1.64146)$$
+Since, 0 is within the CI, it can be said that the mean of grade 3 is significantly different from the mean of grade 1 and 2.
+
+
+
+
+
+
+
+\newpage
+# Problem 2
+
+Consider the data in Exercise 42 in Chapter 10 Supplementary Exercises. Carry out the instructions below. Use software if possible.
+
+ a. Obtain the ANOVA table for testing the hypothesis that mean CFF values are all the same.
+ b. State/give the relevant hypotheses at $\alpha=0.05$. Follow the 4-step hypothesis test outline. Give the reject region or the P-value.
+ c. Do the following residual plots suggest strong evidence that the model assumptions are violated?
+Explain briefly.
+
+```{r echo=FALSE, fig.align="center", warning=FALSE, out.width="375px"}
+knitr::include_graphics("/Users/muhtasim/Desktop/hw4_q2.jpeg")
+```
+
+ d. Perform the Tukey method of underscoring (95% confidence) to determine which means differ. Write a few sentences to summarize your findings.
+ 
+
+# Answer
+
+## a.
+
+ANOVA table in R for testing the hypothesis that mean CFF values are all the same. Here, the treatments have unequal sample sizes.
+```{r}
+#building the data frame
+hw4_2=data.frame(Color=c(rep("Brown",8),rep("Green",5),rep("Blue",6)),
+           CFF=c(26.8, 27.9, 23.7, 25.0, 26.3, 24.8, 25.7, 24.5,
+                 26.4, 24.2, 28.0, 26.9, 29.1,
+                 25.7, 27.2, 29.9, 28.5, 29.4, 28.3)) 
+#carrying out ANOVA
+hw4_2out=aov(CFF~Color,hw4_2)
+#ANOVA table
+summary(hw4_2out)
+```
+
+## b.
+
+Now, since we have the F-statistic from the ANOVA table generated in R, we can run our 4-step hypothesis testing outline.
+
+### \underline{Step1:}
+
+Null hypothesis, $H_0: \space \mu_1 = \mu_2 = \mu_3$.\newline
+Alternative hypothesis, $H_a: H_0$ is false.\newline
+Level of significane, $\alpha=0.05$
+
+### \underline{Step2:}
+
+From the ANOVA table, F-statistic, $$F=4.802$$
+
+### \underline{Step3:}
+
+Using built in function in R, we find (here, n=19) the p-value for unequal sample size.
+$$p-value= 0.02325398$$
+```{r echo=TRUE, message=FALSE}
+#1-pf(F,I-1,n-I)
+1-pf(4.802,3-1,19-3)
+```
+
+### \underline{Step4:}
+
+It is evident that, 
+$$0.02325398<0.05$$
+$$p-value<\alpha$$
+
+So, we can reject the null hypothesis and accept the alternate hypothesis. This indicates that there are significant differences among true mean CFF values for the three treatments.
+
+
+## c.
+
+The normal probability plot for the current dataset is generated in R as below.
+```{r}
+##fitted values
+Fitted=hw4_2out$fitted.values 
+##residuals 
+Residuals=hw4_2out$residuals
+###create the normal probability plot
+qqnorm(Residuals,main="Normal Probability Plot")
+##draw the straight line
+qqline(Residuals)
+```
+
+\underline{Assumption of Normality:}
+
+From the normal probabilty plot, we can see a linear trend among the data points which is expected for a normally distributed data. So, it indicates that the data come from a normal distribution. It can also be verified using Shapiro-Wilk test and Anderson-Darling test for normality as below.
+
+```{r}
+## Shapiro-Wilk normality test
+shapiro.test(Residuals)
+```
+
+```{r}
+## Anderson-Darling normality test
+library(nortest)
+ad.test(Residuals)
+```
+
+Since, for both the tests, $p-value>\alpha=0.05$, the null is retained which indicates that the data belong to a normal distribution. So, the assumption of normality, which is requires for ANOVA, was \underline{not violated}.
+
+\underline{Assumption of Equal Variance:}
+
+The the residuals vs fitted plot for the current dataset is generated in R as below.
+
+```{r}
+###create the residuals vs fitted plot
+plot(Fitted, main="Residuals vs Fitted Plot", Residuals,xlab="fitted",ylab="resid")
+abline(h=0,lty=2)
+```
+
+From the plot, we can see the residual values for each treatment plotted along the vertical direction. The horizontal axis denotes the mean values for different treatments. From looking at the vertical spread of the variance of the replicates, it can be said that the four treatments have same variance. So, the second assumption required for ANOVA test was \underline{not violated} either.
+
+
+## d.
+
+TheTukey method of underscoring (95% confidence) to determine which means differ.
+
+```{r}
+#building the data frame
+hw4_2=data.frame(Color=c(rep("Brown",8),rep("Green",5),rep("Blue",6)),
+           CFF=c(26.8, 27.9, 23.7, 25.0, 26.3, 24.8, 25.7, 24.5,
+                 26.4, 24.2, 28.0, 26.9, 29.1,
+                 25.7, 27.2, 29.9, 28.5, 29.4, 28.3)) 
+#carrying out ANOVA
+hw4_2out=aov(CFF~Color,hw4_2)
+TukeyHSD(hw4_2out,conf.level=0.95)
+source(url("http://math.wsu.edu/math/faculty/jpascual/stat423/R/one-way-T-method.R"))
+oneway.t.method(hw4_2out,conf.level=0.95,ndigits=2) # T Method
+```
+
+We see from the underscore plot that the treatnent 2 and 3 are not significantly different. Same goes for the treatment 3 and 1. But treatment 2 and 1 are sifnificantly different.
+
+
